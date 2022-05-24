@@ -124,16 +124,32 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         //Deseleccionar tarea
         tablaTareas.deselectRow(at: indexPath, animated: true)
     }
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let accionEliminar = UIContextualAction(style: .normal, title: "Eliminar") { _, _, _ in
-           //eliminar del contexto
-            self.contexto.delete(self.listaTareas[indexPath.row])
-            //eliminar del lista
-            self.listaTareas.remove(at: indexPath.row)
-            self.guardar()
-        }
-        accionEliminar.backgroundColor = .red
-        return UISwipeActionsConfiguration(actions: [accionEliminar])
-    }
-}
 
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        //creamos variable alerta
+              let accionEliminar = UIContextualAction(style: .normal, title: "Delete") { _, _, _ in
+                let alertaDelete = UIAlertController(title: "Delete", message: "¿Are you sure?", preferredStyle: .alert)
+                let accionAceptar = UIAlertAction(title: "Delete", style: .default) { _ in
+              
+               //eliminar del contexto
+                self.contexto.delete(self.listaTareas[indexPath.row])
+                //eliminar del lista
+                self.listaTareas.remove(at: indexPath.row)
+                self.guardar()
+                 
+                    
+            }
+                let cancelar = UIAlertAction(title: "Cancelar", style: .default)
+                            
+                alertaDelete.addAction(accionAceptar)
+                alertaDelete.addAction(cancelar)
+                self.present(alertaDelete, animated: true)
+                        }//Let accionEliminar de la UIContextualAction
+                        
+                        accionEliminar.backgroundColor = .red
+                        
+                        return UISwipeActionsConfiguration(actions: [accionEliminar])
+    }
+    
+}
